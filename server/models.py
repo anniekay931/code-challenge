@@ -25,7 +25,7 @@ class Vendor(db.Model, SerializerMixin):
 class Sweet(db.Model, SerializerMixin):
     __tablename__ = 'sweets'
 
-    serialize_rules = ('-vendor_sweets.sweet', 'vendors.sweet')
+    serialize_rules = ('-vendor_sweets.sweet', '-vendors.sweet')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -46,11 +46,11 @@ class VendorSweet(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-@validates('price')
-def validates_price(self, key, price):
-    if not price or price < 0:
-        raise ValueError('Must have a price above 0')
-    return price
+    @validates('price')
+    def validates_price(self, key, price):
+        if not price or price < 0:
+            raise ValueError('Must have a price above 0')
+        return price
 
 # Add models here
 
